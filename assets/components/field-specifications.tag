@@ -73,7 +73,7 @@
 
         this.on('mount', function () {
             if ($this.opts.template_collection) {
-                var fieldname = opts.bind.replace(/^entry\./, "");
+                var fieldname = opts.bind.replace(/^_?entry\./, "");
                 var collection = $this.$boundTo.collection.name;
 
                 App.request('/specifications/templates/' + $this.opts.template_collection).then(function (response) {
