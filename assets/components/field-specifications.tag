@@ -6,11 +6,17 @@
         <div class="uk-width-1-1 uk-margin-bottom" show="{templates.length > 0}">
             <label title="{templateId}">
                 <span class="uk-text-bold">Template: </span>
-                <select name="template" onchange="{this.templateSelect}" bind="templateId">
+                <select name="template" onchange="{templateSelect}" bind="templateId">
                     <option value="" if="{!templateId}"/>
                     <option each="{t in templates}" value="{t.id}">{t.name}</option>
                 </select>
                 <em if="{!templateId}">No template selected!</em>
+                <a if="{templateId}" class="uk-button uk-button-small uk-button-primary" onclick="{copy}">
+                    {App.i18n.get("Copy values")}
+                </a>
+                <a class="uk-button uk-button-small uk-button-primary" onclick="{paste}">
+                    {App.i18n.get("Paste values")}
+                </a>
             </label>
         </div>
         <div each="{attrib in template.attributes}" class="uk-grid">
@@ -19,7 +25,7 @@
                     {attrib.name}
                 </label>
                 <input id="{attrib.id}" type="text" class="uk-width-1-1" bind="values[{attrib.id}]"
-                       title="{attrib.name}" list="{'list_' + attrib.id}" onchange="{this.trimInput}"/>
+                       title="{attrib.name}" list="{'list_' + attrib.id}" onchange="{trimInput}"/>
                 <datalist id="{'list_' + attrib.id}">
                     <option each="{suggestion in suggestions[attrib.id]}" value="{suggestion}"/>
                 </datalist>
@@ -90,7 +96,7 @@
             }
         });
 
-        this.templateSelect = function (e) {
+        templateSelect(e) {
             var newTemplate = _.find($this.templates, {id: e.target.value}) || {};
             // update value and copy data on attributes with same names
             if ($this.templateId && newTemplate.id) {
@@ -108,11 +114,30 @@
             }
             $this.update();
             $this.$boundTo.$bindUpdate();
-        };
+        }
 
-        this.trimInput = function (e) {
-            // console.log("trim", e);
+        trimInput(e) {
             e.target.value = e.target.value.toString().trim();
+        }
+
+        copy() {
+            var content = JSON.stringify($this.$getValue());
+            navigator.clipboard.writeText(content).then(function () {
+                App.ui.notify("Copied!");
+            })
+        }
+
+        paste() {
+            navigator.clipboard.readText().then(function (text) {
+                try {
+                    var value = JSON.parse(text);
+                    $this.$setValue(value);
+                    App.ui.notify("Pasted!", "success");
+                    $this.update();
+                } catch (e) {
+                    App.ui.notify("Invalid paste!", "danger");
+                }
+            });
         }
     </script>
 </field-specifications>
