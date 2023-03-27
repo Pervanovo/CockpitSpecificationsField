@@ -34,4 +34,4 @@ $app->on("collections.find.after", function ($collectionName, &$entries, $isUpda
       }
     }
   }
-});
+}, -10);
