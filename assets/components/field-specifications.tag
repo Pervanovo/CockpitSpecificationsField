@@ -8,7 +8,7 @@
                 <span class="uk-text-bold">Template: </span>
                 <select name="template" onchange="{templateSelect}" bind="templateId">
                     <option value="" if="{!templateId}"/>
-                    <option each="{t in templates}" value="{t.id}">{t.name}</option>
+                    <option each="{t in templates}" selected="{templateId === t.id}" value="{t.id}" >{t.name}</option>
                 </select>
                 <em if="{!templateId}">No template selected!</em>
                 <a if="{templateId}" class="uk-button uk-button-small uk-button-primary" onclick="{copy}">
