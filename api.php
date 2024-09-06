@@ -21,7 +21,7 @@ $app->on("collections.find.after", function ($collectionName, &$entries, $isUpda
           $specifications = [];
           foreach ($template['attributes'] as $repeaterAttribute) {
             $attribute = $repeaterAttribute['value'];
-            if ($values[$attribute['id']]) {
+            if ($values[$attribute['id']] ?? false) {
               $specifications[] = [
                 'name' => $attribute['name'],
                 'value' => $values[$attribute['id']]
