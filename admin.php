@@ -44,8 +44,8 @@ $app->on('admin.init', function () use ($app) {
     $entries = $app->module('collections')->find($collectionName, $criteria);
     $values = [];
     foreach ($entries as $entry) {
-      foreach ($entry[$fieldName]['values'] as $id => $value) {
-        if (!$values[$id] || !in_array($value, $values[$id])) {
+      foreach ($entry[$fieldName]['values'] ?? [] as $id => $value) {
+        if (!in_array($value, $values[$id] ?? [])) {
           $values[$id][] = $value;
         }
       }
